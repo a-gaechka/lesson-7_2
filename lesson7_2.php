@@ -8,55 +8,6 @@
     if (isset($_GET['show'])){
       $show= $_SESSION['advert'][$_GET['show']]; 
     }
-    function show_private(){
-       if (isset($_GET['show']) && $_SESSION['advert'][$_GET['show']]['private']==1){
-         echo '<div class="form-row-indented chec" id="chec"> 
-               <label class="form-label-radio">
-                    <input type="radio" checked="" value="1" name="private">Частное лицо
-                </label>
-            </div>'; 
-       }elseif (isset($_GET['show']) && $_SESSION['advert'][$_GET['show']]['private']==0) {
-         echo '<div class="form-row-indented chec" id="chec"> 
-                <label class="form-label-radio">
-                    <input type="radio" checked="" value="0" name="private">Компания
-                </label> 
-            </div>';
-        }else {
-            echo '<div class="form-row-indented chec" id="chec"> 
-                    <label class="form-label-radio">
-                        <input type="radio" checked="" value="1" name="private">Частное лицо
-                    </label> 
-                    <label class="form-label-radio">
-                        <input type="radio" value="0" name="private">Компания
-                    </label> 
-                </div>';
-        }
-   }
-   function allow_mails(){
-       if (isset($_GET['show']) && $_SESSION['advert'][$_GET['show']]['allow_mails']==""){
-         echo '<div class="form-row-indented"> 
-                <label class="form-label-checkbox" for="allow_mails"> 
-                    <input type="checkbox" value="" name="allow_mails" id="allow_mails" class="form-input-checkbox">
-                    <span class="form-text-checkbox">Я не хочу получать вопросы по объявлению по e-mail</span> 
-                </label> 
-            </div>'; 
-       }elseif (isset($_GET['show']) && $_SESSION['advert'][$_GET['show']]['allow_mails']==0) {
-         echo '<div class="form-row-indented"> 
-                <label class="form-label-checkbox" for="allow_mails"> 
-                    <input type="checkbox" checked="" value="0" name="allow_mails" id="allow_mails" class="form-input-checkbox">
-                    <span class="form-text-checkbox">Я не хочу получать вопросы по объявлению по e-mail</span> 
-                </label> 
-            </div>';
-        }else {
-            echo '
-            <div class="form-row-indented"> 
-                <label class="form-label-checkbox" for="allow_mails"> 
-                    <input type="checkbox" value="0" name="allow_mails" id="allow_mails" class="form-input-checkbox">
-                    <span class="form-text-checkbox">Я не хочу получать вопросы по объявлению по e-mail</span> 
-                </label> 
-            </div>';
-        }
-    }
     function show_city_block($city=''){
         if (isset($_GET['show'])){
             $citys = array('641780'=>'Новосибирск','641490'=>'Барабинск','641510'=>'Бердск','641510'=>'Бердск','641600'=>'Искитим','641630'=>'Колывань','641510'=>'Бердск','641510'=>'Бердск','641510'=>'Бердск','641680'=>'Краснообск','641710'=>'Куйбышев','641760'=>'Мошково');
@@ -84,7 +35,6 @@
             echo '</select>'; 
         }  
     }
-    
     function show_description(){
        if (isset($_GET['show'])){
          echo $_SESSION['advert'][$_GET['show']]['description']; 
@@ -92,7 +42,6 @@
             echo '<textarea maxlength="3000" value="" name="description" id="fld_description" class="form-input-textarea"></textarea> ';
         }
     }
-   
     function show_category_block($categorys=''){
         if (isset($_GET['show'])){
             $category_all = array(
@@ -157,9 +106,26 @@
     </head>
     <body>
         <form  method="post" id="f_item" class="f js-submit">
-            <?php
-                show_private();
-             ?>
+            <?php 
+            if (isset($_GET['show']) && $_SESSION['advert'][$_GET['show']]['private']==0){
+                echo '<div class="form-row-indented chec" id="chec"> 
+                        <label class="form-label-radio">
+                            <input type="radio"  value="1" name="private">Частное лицо
+                        </label>
+                        <label class="form-label-radio">
+                            <input type="radio" checked="" value="0" name="private">Компания
+                        </label> 
+                    </div>'; 
+            }else{
+                echo '<div class="form-row-indented chec" id="chec"> 
+                        <label class="form-label-radio">
+                            <input type="radio" checked="" value="1" name="private">Частное лицо
+                        </label>
+                        <label class="form-label-radio">
+                            <input type="radio" value="0" name="private">Компания
+                        </label> 
+                      </div>';
+            }?>
             <div class="form-row"> 
                 <label for="fld_seller_name" class="form-label">
                     <b id="your-name">Ваше имя</b>
@@ -170,9 +136,23 @@
                 <label for="fld_email" class="form-label">Электронная почта</label>
                 <input type="text" class="form-input-text" value="<?= $show['email']?>" name="email" id="fld_email">
             </div>
-                <?php
-                    allow_mails();
-                ?>
+            <?php
+                if (isset($_GET['show']) && $_SESSION['advert'][$_GET['show']]['allow_mails']==0){
+                    echo '<div class="form-row-indented"> 
+                            <label class="form-label-checkbox" for="allow_mails"> 
+                                <input type="checkbox" checked="" value="0" name="allow_mails" id="allow_mails" class="form-input-checkbox">
+                                <span class="form-text-checkbox">Я не хочу получать вопросы по объявлению по e-mail</span> 
+                            </label> 
+                          </div>'; 
+                }else{
+                    echo '<div class="form-row-indented"> 
+                            <label class="form-label-checkbox" for="allow_mails"> 
+                                <input type="checkbox" value="" name="allow_mails" id="allow_mails" class="form-input-checkbox">
+                                <span class="form-text-checkbox">Я не хочу получать вопросы по объявлению по e-mail</span> 
+                            </label> 
+                        </div>';
+                }
+            ?>
             <div class="form-row"> 
                 <label id="fld_phone_label" for="fld_phone" class="form-label">Номер телефона</label> 
                 <input type="text" class="form-input-text" value="<?= $show['phone']?>" name="phone" id="fld_phone">
@@ -246,54 +226,84 @@
 
 <?php
     $file = fopen('advert.html', 'w');
-    $_SESSION['advert'][] = $_POST;
-    foreach ($_SESSION['advert'] as $key => $value){
-        if (isset($value['title']) && isset($value['price']) && isset($value['name'])) {
+   
+    if (isset($_GET['show']) && isset($_POST['main_form_submit'])){
+        unset($_SESSION['advert'][$_GET['show']]);
+        $_SESSION['advert'][] = $_POST;
+        foreach ($_SESSION['advert'] as $key => $value){
+            if (isset($value['title']) && isset($value['price']) && isset($value['name'])) {
+                
+                $private=  serialize($value['private']);
+                $allow_mails=  serialize($value['allow_mails']);
+                $name=  serialize($value['name']);
+                $email=  serialize($value['email']);
+                $phone=  serialize($value['phone']);
+                $location_id=  serialize($value['location_id']);
+                $category_id=  serialize($value['category_id']);
+                $title=serialize($value['title']);
+                $description=  serialize($value['description']);
+                $price=  serialize($value['price']);
+
+                $ads = fwrite($file, 'Форма собственности'.$private.'<br>');
+                $ads = fwrite($file, 'Рассылка'.$allow_mails.'<br>');
+                $ads = fwrite($file, 'Ваше имя'.$name.'<br>');
+                $ads = fwrite($file, 'Электронная почта'.$email.'<br>');
+                $ads = fwrite($file, 'Номер телефона '.$phone.'<br>');
+                $ads = fwrite($file, 'Город'.$location_id.'<br>');
+                $ads = fwrite($file, 'Категория'.$category_id.'<br>');
+                $ads = fwrite($file, 'Название объявления'.$title.'<br>');
+                $ads = fwrite($file, 'Описание объявления'.$description.'<br>');
+                $ads = fwrite($file, 'Цена'.$price.'<br>');
+                $ads = fwrite($file, '<br>');
             
-            $private=  serialize($value['private']);
-            $allow_mails=  serialize($value['allow_mails']);
-            $name=  serialize($value['name']);
-            $email=  serialize($value['email']);
-            $phone=  serialize($value['phone']);
-            $location_id=  serialize($value['location_id']);
-            $category_id=  serialize($value['category_id']);
-            $title=serialize($value['title']);
-            $description=  serialize($value['description']);
-            $price=  serialize($value['price']);
-            
-            $ads = fwrite($file, 'Форма собственности'.$private.'<br>');
-            $ads = fwrite($file, 'Рассылка'.$allow_mails.'<br>');
-            $ads = fwrite($file, 'Ваше имя'.$name.'<br>');
-            $ads = fwrite($file, 'Электронная почта'.$email.'<br>');
-            $ads = fwrite($file, 'Номер телефона '.$phone.'<br>');
-            $ads = fwrite($file, 'Город'.$location_id.'<br>');
-            $ads = fwrite($file, 'Категория'.$category_id.'<br>');
-            $ads = fwrite($file, 'Название объявления'.$title.'<br>');
-            $ads = fwrite($file, 'Описание объявления'.$description.'<br>');
-            $ads = fwrite($file, 'Цена'.$price.'<br>');
-            $ads = fwrite($file, '<br>');
-            
-            echo '<span style="border:2px dotted #444; padding:20px; display:block;">';
-                echo '<span style="float:left;min-width: 152px;">';
-                    echo '<a href="http://xaver.loc/lesson7_2/?show='.$key.'">'.$value['title'].'</a>'.'<br/>';
+                echo '<span style="border:2px dotted #444; padding:20px; display:block;">';
+                    echo '<span style="float:left;min-width: 152px;">';
+                        echo '<a href="http://xaver.loc/lesson7_2/?show='.$key.'">'.$value['title'].'</a>'.'<br/>';
+                    echo '</span>';
+                    echo '<span style="float:left;margin: 0 50px 0 50px;"">|</span>';
+                    echo '<span style="float:left;min-width: 100px;">';
+                        echo $value['price'].'<br/>';
+                    echo '</span>';
+                    echo '<span style="float:left;margin: 0 50px 0 50px;">|</span>';
+                    echo '<span style="float:left;min-width: 100px;">';
+                        echo $value['name'].'<br/>';
+                    echo '</span>';
+                    echo '<span style="float:left; margin: 0 50px 0 50px;">|</span>';
+                    echo '<span style="float:left;min-width: 100px;">';
+                        echo '<a href="http://xaver.loc/lesson7_2/?del='.$key.'">'.'Удалить'.'</a>'.'<br/>';
+                    echo '</span>';
+                    echo '<span style="float:left; margin: 0 50px 0 50px;">|</span>';
+                    echo '<div style="clear:both; margin-bottom: 10px;";></div>';
                 echo '</span>';
-                echo '<span style="float:left;margin: 0 50px 0 50px;"">|</span>';
-                echo '<span style="float:left;min-width: 100px;">';
-                    echo $value['price'].'<br/>';
+             }
+
+        }
+    }else {
+        $_SESSION['advert'][] = $_POST;
+        foreach ($_SESSION['advert'] as $key => $value){
+            if (isset($value['title']) && isset($value['price']) && isset($value['name'])) {
+                echo '<span style="border:2px dotted #444; padding:20px; display:block;">';
+                    echo '<span style="float:left;min-width: 152px;">';
+                        echo '<a href="http://xaver.loc/lesson7_2/?show='.$key.'">'.$value['title'].'</a>'.'<br/>';
+                    echo '</span>';
+                    echo '<span style="float:left;margin: 0 50px 0 50px;"">|</span>';
+                    echo '<span style="float:left;min-width: 100px;">';
+                        echo $value['price'].'<br/>';
+                    echo '</span>';
+                    echo '<span style="float:left;margin: 0 50px 0 50px;">|</span>';
+                    echo '<span style="float:left;min-width: 100px;">';
+                        echo $value['name'].'<br/>';
+                    echo '</span>';
+                    echo '<span style="float:left; margin: 0 50px 0 50px;">|</span>';
+                    echo '<span style="float:left;min-width: 100px;">';
+                        echo '<a href="http://xaver.loc/lesson7_2/?del='.$key.'">'.'Удалить'.'</a>'.'<br/>';
+                    echo '</span>';
+                    echo '<span style="float:left; margin: 0 50px 0 50px;">|</span>';
+                    echo '<div style="clear:both; margin-bottom: 10px;";></div>';
                 echo '</span>';
-                echo '<span style="float:left;margin: 0 50px 0 50px;">|</span>';
-                echo '<span style="float:left;min-width: 100px;">';
-                    echo $value['name'].'<br/>';
-                echo '</span>';
-                echo '<span style="float:left; margin: 0 50px 0 50px;">|</span>';
-                echo '<span style="float:left;min-width: 100px;">';
-                    echo '<a href="http://xaver.loc/lesson7_2/?del='.$key.'">'.'Удалить'.'</a>'.'<br/>';
-                echo '</span>';
-                echo '<span style="float:left; margin: 0 50px 0 50px;">|</span>';
-                echo '<div style="clear:both; margin-bottom: 10px;";></div>';
-            echo '</span>';
-         }
-         
+             }
+
+        }   
     }
     fclose($file);
 ?>
